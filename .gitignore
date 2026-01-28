@@ -6,3 +6,5 @@ j
 demo.js
 ui-preview.html
 verify.js
+renderer/
+main.js
