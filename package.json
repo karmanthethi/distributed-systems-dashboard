@@ -1,0 +1,22 @@
+{
+  "name": "distributed-systems-dashboard",
+  "version": "2.0.0",
+  "description": "Distributed Systems Observability Dashboard - Web application to monitor backend services",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "express",
+    "web",
+    "observability",
+    "monitoring",
+    "dashboard"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.22.1"
+  }
+}
