@@ -3,85 +3,160 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Distributed Systems Observability Dashboard</title>
+  <title>Enterprise Distributed Systems Dashboard</title>
   <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🔍 Distributed Systems Observability Dashboard</h1>
-      <button id="simulate-btn" class="simulate-btn">Simulate Traffic (10 requests)</button>
-    </header>
-    
-    <div class="dashboard">
-      <div class="service-card" id="service-a-card">
-        <div class="service-header">
-          <h2>Service A</h2>
-          <div class="status-indicator" id="service-a-status"></div>
-        </div>
-        <div class="metrics">
-          <div class="metric">
-            <span class="metric-label">Avg Latency</span>
-            <span class="metric-value" id="service-a-latency">0 ms</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Error Rate</span>
-            <span class="metric-value" id="service-a-error">0%</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Request Count</span>
-            <span class="metric-value" id="service-a-count">0</span>
-          </div>
-        </div>
+  <!-- Navigation Header -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">SystemWatch</span>
       </div>
-
-      <div class="service-card" id="service-b-card">
-        <div class="service-header">
-          <h2>Service B</h2>
-          <div class="status-indicator" id="service-b-status"></div>
-        </div>
-        <div class="metrics">
-          <div class="metric">
-            <span class="metric-label">Avg Latency</span>
-            <span class="metric-value" id="service-b-latency">0 ms</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Error Rate</span>
-            <span class="metric-value" id="service-b-error">0%</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Request Count</span>
-            <span class="metric-value" id="service-b-count">0</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="service-card" id="service-c-card">
-        <div class="service-header">
-          <h2>Service C</h2>
-          <div class="status-indicator" id="service-c-status"></div>
-        </div>
-        <div class="metrics">
-          <div class="metric">
-            <span class="metric-label">Avg Latency</span>
-            <span class="metric-value" id="service-c-latency">0 ms</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Error Rate</span>
-            <span class="metric-value" id="service-c-error">0%</span>
-          </div>
-          <div class="metric">
-            <span class="metric-label">Request Count</span>
-            <span class="metric-value" id="service-c-count">0</span>
-          </div>
-        </div>
+      <nav class="nav-links">
+        <a href="#" class="nav-link active" data-section="dashboard">Dashboard</a>
+        <a href="#" class="nav-link" data-section="services">Services</a>
+        <a href="#" class="nav-link" data-section="anomalies">Anomalies</a>
+        <a href="#" class="nav-link" data-section="performance">Performance</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="btn-icon" id="refresh-btn" title="Refresh">🔄</button>
+        <button class="btn-icon" id="settings-btn" title="Settings">⚙️</button>
       </div>
     </div>
+  </header>
 
-    <footer>
-      <p>Auto-refreshing every 2 seconds | Last updated: <span id="last-update">Never</span></p>
-    </footer>
+  <!-- Main Container -->
+  <main class="container">
+    <!-- Dashboard Section -->
+    <section id="dashboard-section" class="section active">
+      <!-- Top Stats -->
+      <div class="top-stats">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">System Health</span>
+            <span class="stat-icon">💚</span>
+          </div>
+          <div class="stat-value" id="health-score">--</div>
+          <div class="stat-subtext">Overall score</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Total Requests</span>
+            <span class="stat-icon">📊</span>
+          </div>
+          <div class="stat-value" id="total-requests">--</div>
+          <div class="stat-subtext">All services</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Error Rate</span>
+            <span class="stat-icon">⚠️</span>
+          </div>
+          <div class="stat-value" id="error-rate">--</div>
+          <div class="stat-subtext">System average</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-label">Anomalies</span>
+            <span class="stat-icon">🔴</span>
+          </div>
+          <div class="stat-value" id="anomalies-count">--</div>
+          <div class="stat-subtext">Detected issues</div>
+        </div>
+      </div>
+
+      <!-- Services Grid -->
+      <div class="services-section">
+        <h2>Service Metrics</h2>
+        <div class="services-grid" id="services-grid">
+          <!-- Services will be populated here -->
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="btn btn-primary" id="simulate-traffic-btn">
+          <span class="btn-icon">▶️</span> Simulate Traffic
+        </button>
+        <button class="btn btn-secondary" id="stress-test-btn">
+          <span class="btn-icon">🔥</span> Run Stress Test
+        </button>
+        <button class="btn btn-danger" id="reset-btn">
+          <span class="btn-icon">🔄</span> Reset Metrics
+        </button>
+      </div>
+    </section>
+
+    <!-- Services Detail Section -->
+    <section id="services-section" class="section">
+      <h2>Detailed Service Analysis</h2>
+      <div class="services-detail" id="services-detail">
+        <!-- Detailed service cards will be populated here -->
+      </div>
+    </section>
+
+    <!-- Anomalies Section -->
+    <section id="anomalies-section" class="section">
+      <h2>System Anomalies & Events</h2>
+      <div class="anomalies-filter">
+        <select id="anomaly-severity-filter">
+          <option value="">All Severities</option>
+          <option value="critical">Critical</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+      <div class="anomalies-list" id="anomalies-list">
+        <!-- Anomalies will be populated here -->
+      </div>
+    </section>
+
+    <!-- Performance Section -->
+    <section id="performance-section" class="section">
+      <h2>Performance Analytics</h2>
+      <div class="charts-grid">
+        <div class="chart-container">
+          <h3>Latency Trends</h3>
+          <canvas id="latency-chart"></canvas>
+        </div>
+        <div class="chart-container">
+          <h3>Error Rate Trends</h3>
+          <canvas id="error-chart"></canvas>
+        </div>
+        <div class="chart-container">
+          <h3>Resource Usage</h3>
+          <canvas id="resource-chart"></canvas>
+        </div>
+        <div class="chart-container">
+          <h3>Status Code Distribution</h3>
+          <canvas id="status-chart"></canvas>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>Last Updated: <span id="last-update">--:--:--</span></p>
+      <p class="footer-stats">
+        Services: <span id="footer-services">0</span> | 
+        Uptime: <span id="footer-uptime">0h</span>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Loading Spinner -->
+  <div class="loading-spinner" id="loading-spinner">
+    <div class="spinner"></div>
   </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast-container" class="toast-container"></div>
 
   <script src="dashboard.js"></script>
 </body>

@@ -1,7 +1,7 @@
 {
   "name": "distributed-systems-dashboard",
-  "version": "2.0.0",
-  "description": "Distributed Systems Observability Dashboard - Web application to monitor backend services",
+  "version": "3.0.0",
+  "description": "Enterprise-Grade Distributed Systems Monitoring Dashboard with Real-time Analytics",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -12,11 +12,19 @@
     "web",
     "observability",
     "monitoring",
-    "dashboard"
+    "dashboard",
+    "metrics",
+    "analytics",
+    "distributed-systems",
+    "telemetry"
   ],
-  "author": "",
+  "author": "Distributed Systems Team",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.22.1"
+    "compression": "^1.8.1",
+    "cors": "^2.8.6",
+    "express": "^4.22.1",
+    "helmet": "^7.2.0",
+    "moment": "^2.30.1"
   }
 }
