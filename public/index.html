@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Distributed Systems Observability Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔍 Distributed Systems Observability Dashboard</h1>
+      <button id="simulate-btn" class="simulate-btn">Simulate Traffic (10 requests)</button>
+    </header>
+    
+    <div class="dashboard">
+      <div class="service-card" id="service-a-card">
+        <div class="service-header">
+          <h2>Service A</h2>
+          <div class="status-indicator" id="service-a-status"></div>
+        </div>
+        <div class="metrics">
+          <div class="metric">
+            <span class="metric-label">Avg Latency</span>
+            <span class="metric-value" id="service-a-latency">0 ms</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Error Rate</span>
+            <span class="metric-value" id="service-a-error">0%</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Request Count</span>
+            <span class="metric-value" id="service-a-count">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-card" id="service-b-card">
+        <div class="service-header">
+          <h2>Service B</h2>
+          <div class="status-indicator" id="service-b-status"></div>
+        </div>
+        <div class="metrics">
+          <div class="metric">
+            <span class="metric-label">Avg Latency</span>
+            <span class="metric-value" id="service-b-latency">0 ms</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Error Rate</span>
+            <span class="metric-value" id="service-b-error">0%</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Request Count</span>
+            <span class="metric-value" id="service-b-count">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="service-card" id="service-c-card">
+        <div class="service-header">
+          <h2>Service C</h2>
+          <div class="status-indicator" id="service-c-status"></div>
+        </div>
+        <div class="metrics">
+          <div class="metric">
+            <span class="metric-label">Avg Latency</span>
+            <span class="metric-value" id="service-c-latency">0 ms</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Error Rate</span>
+            <span class="metric-value" id="service-c-error">0%</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Request Count</span>
+            <span class="metric-value" id="service-c-count">0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>Auto-refreshing every 2 seconds | Last updated: <span id="last-update">Never</span></p>
+    </footer>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

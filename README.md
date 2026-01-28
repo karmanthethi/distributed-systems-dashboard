@@ -1,20 +1,20 @@
 # Distributed Systems Observability Dashboard
 
-A desktop application built with Electron to monitor multiple backend services and display real-time observability metrics.
+A web application built with Express.js and Node.js to monitor multiple backend services and display real-time observability metrics.
 
 ## 🏗️ Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                     ELECTRON APPLICATION                         │
+│                     WEB APPLICATION                              │
 │                                                                   │
 │  ┌──────────────────────────────────────────────────────────┐   │
-│  │                    MAIN PROCESS                           │   │
-│  │                      (main.js)                            │   │
+│  │                    EXPRESS SERVER                         │   │
+│  │                      (server.js)                          │   │
 │  │                                                            │   │
-│  │  • Manages application window lifecycle                   │   │
-│  │  • Starts backend services on app launch                  │   │
-│  │  • Handles IPC communication with renderer                │   │
+│  │  • Serves static files (HTML/CSS/JS)                      │   │
+│  │  • Starts backend services on server launch               │   │
+│  │  • Provides REST API endpoints                            │   │
 │  └───────────────┬──────────────────────────┬────────────────┘   │
 │                  │                          │                     │
 │      ┌───────────▼──────────┐    ┌──────────▼───────────┐        │
@@ -44,10 +44,10 @@ A desktop application built with Electron to monitor multiple backend services a
 │      │                      │    │  └────────────────┘ │        │
 │      └──────────────────────┘    └──────────────────────┘        │
 │                                           │                       │
-│                                           │ IPC                   │
+│                                           │ REST API              │
 │      ┌────────────────────────────────────▼─────────────┐        │
-│      │            RENDERER PROCESS                       │        │
-│      │              (renderer/)                          │        │
+│      │            WEB BROWSER                            │        │
+│      │              (public/)                            │        │
 │      │                                                    │        │
 │      │  ┌──────────────────────────────────────────┐    │        │
 │      │  │          DASHBOARD UI                     │    │        │
@@ -187,19 +187,19 @@ npm install
 npm start
 ```
 
-The dashboard window will open automatically showing real-time metrics from the three simulated services.
+The server will start on port 3000 (or PORT environment variable if set).
 
-### Development Mode
-```bash
-npm run dev
-```
+4. **Open your browser**:
+Navigate to `http://localhost:3000`
+
+The dashboard will show real-time metrics from the three simulated services.
 
 ## 📁 Project Structure
 
 ```
 distributed-systems-dashboard/
 │
-├── main.js                    # Electron main process
+├── server.js                  # Express.js web server
 ├── package.json               # Project dependencies
 │
 ├── services/                  # Simulated backend services
@@ -211,10 +211,10 @@ distributed-systems-dashboard/
 │   ├── metrics-collector.js  # Records all metrics
 │   └── metrics-aggregator.js # Calculates aggregated stats
 │
-└── renderer/                  # Frontend dashboard
+└── public/                    # Frontend dashboard (static files)
     ├── index.html            # Dashboard HTML structure
     ├── styles.css            # Dashboard styling
-    └── dashboard.js          # Dashboard logic & IPC
+    └── dashboard.js          # Dashboard logic & API calls
 ```
 
 ## 🎯 Features
@@ -249,7 +249,7 @@ function getRandomStatusCode() {
 ```
 
 ### Adjusting Alert Thresholds
-Edit constants in `renderer/dashboard.js`:
+Edit constants in `public/dashboard.js`:
 ```javascript
 const LATENCY_WARNING = 600;   // Yellow at 600ms
 const LATENCY_CRITICAL = 800;  // Red at 800ms
@@ -258,26 +258,72 @@ const ERROR_CRITICAL = 20;     // Red at 20%
 ```
 
 ### Adjusting Refresh Rate
-Edit the interval in `renderer/dashboard.js`:
+Edit the interval in `public/dashboard.js`:
 ```javascript
 setInterval(updateMetrics, 2000);  // Refresh every 2 seconds
 ```
 
+### Setting Custom Port
+Use the PORT environment variable:
+```bash
+PORT=8080 npm start
+```
+
+## 🔌 API Endpoints
+
+The server exposes the following REST API endpoints:
+
+### GET /api/metrics
+Returns aggregated metrics for all services.
+
+**Response:**
+```json
+{
+  "service-a": {
+    "avgLatency": 450,
+    "errorRate": 14.2,
+    "requestCount": 127
+  },
+  "service-b": {
+    "avgLatency": 380,
+    "errorRate": 9.1,
+    "requestCount": 142
+  },
+  "service-c": {
+    "avgLatency": 620,
+    "errorRate": 21.5,
+    "requestCount": 95
+  }
+}
+```
+
+### POST /api/simulate-traffic
+Generates 10 random requests across all services.
+
+**Response:**
+```json
+{
+  "success": true
+}
+```
+
 ## 🧪 Testing the Application
 
-1. **Launch the app** - Services start automatically
-2. **Wait 10-15 seconds** - Let services generate baseline metrics
-3. **Click "Simulate Traffic"** - Generates 10 random requests
-4. **Observe the dashboard** - Metrics update in real-time
-5. **Watch for alerts** - Cards turn yellow/red when thresholds exceeded
+1. **Launch the server** - `npm start`
+2. **Open browser** - Navigate to `http://localhost:3000`
+3. **Wait 10-15 seconds** - Let services generate baseline metrics
+4. **Click "Simulate Traffic"** - Generates 10 random requests
+5. **Observe the dashboard** - Metrics update in real-time
+6. **Watch for alerts** - Cards turn yellow/red when thresholds exceeded
 
 ## 📝 Technical Notes
 
-- **No external monitoring libraries**: Built from scratch using only Electron and Node.js
+- **Web-based architecture**: Accessible from any browser, no desktop installation needed
+- **No external monitoring libraries**: Built from scratch using Express.js and Node.js
 - **JavaScript only**: No TypeScript or other transpilers
-- **In-memory storage**: Metrics cleared on app restart
+- **In-memory storage**: Metrics cleared on server restart
 - **Minimal comments**: Code is self-documenting with clear naming
-- **Small function names**: Concise, readable code style
+- **REST API**: Simple GET/POST endpoints for metrics and simulation
 
 ## 🎨 UI Design
 
