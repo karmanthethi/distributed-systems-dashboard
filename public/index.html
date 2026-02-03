@@ -1,163 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Enterprise Distributed Systems Dashboard</title>
+  <title>ServiceWatch | Distributed Systems Monitor</title>
+  <meta name="description"
+    content="Real-time distributed systems monitoring dashboard with enterprise-grade observability">
   <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 </head>
+
 <body>
-  <!-- Navigation Header -->
-  <header class="navbar">
-    <div class="nav-container">
-      <div class="logo">
-        <span class="logo-icon">⚡</span>
-        <span class="logo-text">SystemWatch</span>
+  <!-- Animated Background -->
+  <div class="bg-effects">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Main App Container -->
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+              <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </div>
+          <span class="logo-text">ServiceWatch</span>
+        </div>
       </div>
-      <nav class="nav-links">
-        <a href="#" class="nav-link active" data-section="dashboard">Dashboard</a>
-        <a href="#" class="nav-link" data-section="services">Services</a>
-        <a href="#" class="nav-link" data-section="anomalies">Anomalies</a>
-        <a href="#" class="nav-link" data-section="performance">Performance</a>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-section="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-section="services">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12 2v4m0 12v4M2 12h4m12 0h4" />
+            <path d="M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+          </svg>
+          <span>Services</span>
+        </a>
+        <a href="#" class="nav-item" data-section="anomalies">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span>Anomalies</span>
+        </a>
+        <a href="#" class="nav-item" data-section="performance">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
+          </svg>
+          <span>Analytics</span>
+        </a>
       </nav>
-      <div class="nav-actions">
-        <button class="btn-icon" id="refresh-btn" title="Refresh">🔄</button>
-        <button class="btn-icon" id="settings-btn" title="Settings">⚙️</button>
-      </div>
-    </div>
-  </header>
 
-  <!-- Main Container -->
-  <main class="container">
-    <!-- Dashboard Section -->
-    <section id="dashboard-section" class="section active">
-      <!-- Top Stats -->
-      <div class="top-stats">
-        <div class="stat-card">
-          <div class="stat-header">
-            <span class="stat-label">System Health</span>
-            <span class="stat-icon">💚</span>
-          </div>
-          <div class="stat-value" id="health-score">--</div>
-          <div class="stat-subtext">Overall score</div>
+      <div class="sidebar-footer">
+        <div class="connection-status">
+          <span class="status-dot online"></span>
+          <span>Connected</span>
         </div>
-        <div class="stat-card">
-          <div class="stat-header">
-            <span class="stat-label">Total Requests</span>
-            <span class="stat-icon">📊</span>
-          </div>
-          <div class="stat-value" id="total-requests">--</div>
-          <div class="stat-subtext">All services</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-header">
-            <span class="stat-label">Error Rate</span>
-            <span class="stat-icon">⚠️</span>
-          </div>
-          <div class="stat-value" id="error-rate">--</div>
-          <div class="stat-subtext">System average</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-header">
-            <span class="stat-label">Anomalies</span>
-            <span class="stat-icon">🔴</span>
-          </div>
-          <div class="stat-value" id="anomalies-count">--</div>
-          <div class="stat-subtext">Detected issues</div>
-        </div>
+        <div class="version">v2.0.0</div>
       </div>
+    </aside>
 
-      <!-- Services Grid -->
-      <div class="services-section">
-        <h2>Service Metrics</h2>
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Header Bar -->
+      <header class="top-bar">
+        <div class="page-title">
+          <h1>System Overview</h1>
+          <p class="page-subtitle">Real-time monitoring of your distributed infrastructure</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+            <input type="text" placeholder="Search services..." id="search-input">
+          </div>
+          <button class="btn-icon" id="refresh-btn" title="Refresh">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 4v6h-6" />
+              <path d="M1 20v-6h6" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+          </button>
+          <div class="live-indicator">
+            <span class="pulse"></span>
+            Live
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Section -->
+      <section id="dashboard-section" class="section active">
+        <!-- Quick Stats Row -->
+        <div class="stats-grid">
+          <div class="stat-card" data-type="health">
+            <div class="stat-icon success">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">System Health</span>
+              <span class="stat-value" id="health-score">--</span>
+              <span class="stat-trend up">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                  <polyline points="17 6 23 6 23 12" />
+                </svg>
+                +2.5%
+              </span>
+            </div>
+          </div>
+
+          <div class="stat-card" data-type="requests">
+            <div class="stat-icon info">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 20V10" />
+                <path d="M12 20V4" />
+                <path d="M6 20v-6" />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Total Requests</span>
+              <span class="stat-value" id="total-requests">--</span>
+              <span class="stat-trend up">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                  <polyline points="17 6 23 6 23 12" />
+                </svg>
+                +15.3%
+              </span>
+            </div>
+          </div>
+
+          <div class="stat-card" data-type="errors">
+            <div class="stat-icon warning">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Error Rate</span>
+              <span class="stat-value" id="error-rate">--</span>
+              <span class="stat-trend down">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                  <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
+                  <polyline points="17 18 23 18 23 12" />
+                </svg>
+                -1.2%
+              </span>
+            </div>
+          </div>
+
+          <div class="stat-card" data-type="anomalies">
+            <div class="stat-icon danger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Anomalies</span>
+              <span class="stat-value" id="anomalies-count">--</span>
+              <span class="stat-trend neutral">Active issues</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Services Section -->
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>Service Metrics</h2>
+            <p>Real-time health and performance monitoring</p>
+          </div>
+          <div class="section-actions">
+            <button class="btn-secondary" id="filter-services">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+              </svg>
+              Filter
+            </button>
+            <button class="btn-secondary" id="export-metrics">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Export
+            </button>
+          </div>
+        </div>
+
         <div class="services-grid" id="services-grid">
           <!-- Services will be populated here -->
         </div>
-      </div>
 
-      <!-- Action Buttons -->
-      <div class="action-buttons">
-        <button class="btn btn-primary" id="simulate-traffic-btn">
-          <span class="btn-icon">▶️</span> Simulate Traffic
-        </button>
-        <button class="btn btn-secondary" id="stress-test-btn">
-          <span class="btn-icon">🔥</span> Run Stress Test
-        </button>
-        <button class="btn btn-danger" id="reset-btn">
-          <span class="btn-icon">🔄</span> Reset Metrics
-        </button>
-      </div>
-    </section>
-
-    <!-- Services Detail Section -->
-    <section id="services-section" class="section">
-      <h2>Detailed Service Analysis</h2>
-      <div class="services-detail" id="services-detail">
-        <!-- Detailed service cards will be populated here -->
-      </div>
-    </section>
-
-    <!-- Anomalies Section -->
-    <section id="anomalies-section" class="section">
-      <h2>System Anomalies & Events</h2>
-      <div class="anomalies-filter">
-        <select id="anomaly-severity-filter">
-          <option value="">All Severities</option>
-          <option value="critical">Critical</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </select>
-      </div>
-      <div class="anomalies-list" id="anomalies-list">
-        <!-- Anomalies will be populated here -->
-      </div>
-    </section>
-
-    <!-- Performance Section -->
-    <section id="performance-section" class="section">
-      <h2>Performance Analytics</h2>
-      <div class="charts-grid">
-        <div class="chart-container">
-          <h3>Latency Trends</h3>
-          <canvas id="latency-chart"></canvas>
+        <!-- Action Panel -->
+        <div class="action-panel">
+          <h3>Testing & Simulation</h3>
+          <div class="action-buttons">
+            <button class="btn-primary" id="simulate-traffic-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+              Simulate Traffic
+            </button>
+            <button class="btn-accent" id="stress-test-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+              Stress Test
+            </button>
+            <button class="btn-outline" id="reset-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+              </svg>
+              Reset
+            </button>
+          </div>
         </div>
-        <div class="chart-container">
-          <h3>Error Rate Trends</h3>
-          <canvas id="error-chart"></canvas>
-        </div>
-        <div class="chart-container">
-          <h3>Resource Usage</h3>
-          <canvas id="resource-chart"></canvas>
-        </div>
-        <div class="chart-container">
-          <h3>Status Code Distribution</h3>
-          <canvas id="status-chart"></canvas>
-        </div>
-      </div>
-    </section>
-  </main>
+      </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-content">
-      <p>Last Updated: <span id="last-update">--:--:--</span></p>
-      <p class="footer-stats">
-        Services: <span id="footer-services">0</span> | 
-        Uptime: <span id="footer-uptime">0h</span>
-      </p>
-    </div>
-  </footer>
+      <!-- Services Detail Section -->
+      <section id="services-section" class="section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>Detailed Service Analysis</h2>
+            <p>In-depth metrics and trace information</p>
+          </div>
+        </div>
+        <div class="services-detail" id="services-detail">
+          <!-- Detailed service cards will be populated here -->
+        </div>
+      </section>
 
-  <!-- Loading Spinner -->
-  <div class="loading-spinner" id="loading-spinner">
-    <div class="spinner"></div>
+      <!-- Anomalies Section -->
+      <section id="anomalies-section" class="section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>System Anomalies</h2>
+            <p>Active alerts and issues requiring attention</p>
+          </div>
+          <div class="section-actions">
+            <select id="anomaly-severity-filter" class="select-input">
+              <option value="">All Severities</option>
+              <option value="critical">Critical</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="anomalies-list" id="anomalies-list">
+          <!-- Anomalies will be populated here -->
+        </div>
+      </section>
+
+      <!-- Performance Section -->
+      <section id="performance-section" class="section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>Performance Analytics</h2>
+            <p>Historical trends and detailed metrics</p>
+          </div>
+        </div>
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Latency Trends</h3>
+              <span class="chart-badge">Last 24h</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="latency-chart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Error Rate Trends</h3>
+              <span class="chart-badge">Last 24h</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="error-chart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Resource Usage</h3>
+              <span class="chart-badge">CPU & Memory</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="resource-chart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Status Code Distribution</h3>
+              <span class="chart-badge">All Services</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="status-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="main-footer">
+        <div class="footer-left">
+          <span>Last updated: <strong id="last-update">--:--:--</strong></span>
+        </div>
+        <div class="footer-right">
+          <span>Services: <strong id="footer-services">0</strong></span>
+          <span class="divider">|</span>
+          <span>Uptime: <strong id="footer-uptime">0h</strong></span>
+        </div>
+      </footer>
+    </main>
   </div>
 
-  <!-- Toast Notifications -->
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-spinner">
+    <div class="loader">
+      <div class="loader-ring"></div>
+      <div class="loader-ring"></div>
+      <div class="loader-ring"></div>
+      <span class="loader-text">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
   <div id="toast-container" class="toast-container"></div>
 
   <script src="dashboard.js"></script>
 </body>
+
 </html>

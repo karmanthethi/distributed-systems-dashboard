@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* Default (Dark / Base) */
+:root {
+  --primary: #10b981;
+  --primary-light: #34d399;
+  --accent: #f43f5e;
+  --accent-light: #fb7185;
+  --bg-base: #0f172a;
+  --bg-surface: rgba(30, 41, 59, 0.4);
+  --bg-surface-solid: #1e293b;
+  --bg-elevated: rgba(51, 65, 85, 0.5);
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: rgba(51, 65, 85, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.05);
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+[data-theme="light"] {
+  --primary: #059669;
+  --primary-light: #10b981;
+  --accent: #e11d48;
+  --accent-light: #f43f5e;
+  --bg-base: #f1f5f9;
+  --bg-surface: rgba(255, 255, 255, 0.7);
+  --bg-surface-solid: #ffffff;
+  --bg-elevated: rgba(226, 232, 240, 0.8);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --border-color: rgba(148, 163, 184, 0.3);
+  --glass-border: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="midnight"] {
+  --primary: #6366f1;
+  --primary-light: #818cf8;
+  --accent: #a855f7;
+  --accent-light: #c084fc;
+  --bg-base: #020617;
+  --bg-surface: rgba(15, 23, 42, 0.6);
+  --bg-surface-solid: #0f172a;
+  --bg-elevated: rgba(30, 41, 59, 0.6);
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: rgba(30, 41, 59, 0.5);
+  --glass-border: rgba(255, 255, 255, 0.03);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-display);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-elevated);
+  border-radius: 3px;
+}
+
+a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--primary-light);
+}
+
+button {
+  font-family: var(--font-display);
+}
