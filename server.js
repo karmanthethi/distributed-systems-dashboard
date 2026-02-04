@@ -43,10 +43,10 @@ app.get('/api/metrics', (req, res) => {
       data: metrics
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       error: 'Failed to get metrics',
-      message: error.message 
+      message: error.message
     });
   }
 });
@@ -58,11 +58,11 @@ app.get('/api/metrics/:serviceName', (req, res) => {
   try {
     const metrics = advancedMetricsCollector.getAggregatedMetrics();
     const serviceMetrics = metrics[req.params.serviceName];
-    
+
     if (!serviceMetrics) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        error: 'Service not found' 
+        error: 'Service not found'
       });
     }
 
@@ -73,10 +73,10 @@ app.get('/api/metrics/:serviceName', (req, res) => {
       data: serviceMetrics
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       error: 'Failed to get service metrics',
-      message: error.message 
+      message: error.message
     });
   }
 });
@@ -91,7 +91,7 @@ app.get('/api/anomalies', (req, res) => {
     const limit = parseInt(req.query.limit) || 50;
     const serviceName = req.query.service || null;
     const anomalies = advancedMetricsCollector.getAnomalies(serviceName, limit);
-    
+
     res.json({
       success: true,
       timestamp: Date.now(),
@@ -99,10 +99,10 @@ app.get('/api/anomalies', (req, res) => {
       data: anomalies
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       error: 'Failed to get anomalies',
-      message: error.message 
+      message: error.message
     });
   }
 });
@@ -191,7 +191,7 @@ app.get('/api/anomalies/severity/:severity', (req, res) => {
     const severity = req.params.severity.toLowerCase();
     const anomalies = advancedMetricsCollector.getAnomalies(null, 100);
     const filtered = anomalies.filter(a => a.severity === severity);
-    
+
     res.json({
       success: true,
       timestamp: Date.now(),
@@ -200,10 +200,10 @@ app.get('/api/anomalies/severity/:severity', (req, res) => {
       data: filtered
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       error: 'Failed to get anomalies by severity',
-      message: error.message 
+      message: error.message
     });
   }
 });
@@ -219,7 +219,7 @@ app.get('/api/performance-history', (req, res) => {
     const limit = parseInt(req.query.limit) || 100;
     const history = advancedMetricsCollector.getPerformanceHistory(serviceName);
     const limited = history.slice(-limit);
-    
+
     res.json({
       success: true,
       timestamp: Date.now(),
@@ -227,10 +227,10 @@ app.get('/api/performance-history', (req, res) => {
       data: limited
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       error: 'Failed to get performance history',
-      message: error.message 
+      message: error.message
     });
   }
 });
@@ -249,10 +249,10 @@ app.get('/api/system-stats', (req, res) => {
       data: stats
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       error: 'Failed to get system stats',
-      message: error.message 
+      message: error.message
     });
   }
 });
@@ -267,23 +267,23 @@ app.post('/api/simulate-traffic', async (req, res) => {
     const { count = 10 } = req.body;
     const services = [serviceA, serviceB, serviceC];
     const promises = [];
-    
+
     for (let i = 0; i < count; i++) {
       const service = services[Math.floor(Math.random() * services.length)];
       promises.push(service.simulateRequest());
     }
-    
+
     await Promise.all(promises);
-    res.json({ 
+    res.json({
       success: true,
       message: `Simulated ${count} requests`,
       timestamp: Date.now()
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       error: 'Failed to simulate traffic',
-      message: error.message 
+      message: error.message
     });
   }
 });
@@ -295,15 +295,15 @@ app.post('/api/simulate-traffic/:serviceName', async (req, res) => {
   try {
     const { count = 5 } = req.body;
     const serviceName = req.params.serviceName.toLowerCase();
-    
+
     let service;
     if (serviceName.includes('a')) service = serviceA;
     else if (serviceName.includes('b')) service = serviceB;
     else if (serviceName.includes('c')) service = serviceC;
     else {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        error: 'Invalid service name. Use: service-a, service-b, or service-c' 
+        error: 'Invalid service name. Use: service-a, service-b, or service-c'
       });
     }
 
@@ -311,18 +311,18 @@ app.post('/api/simulate-traffic/:serviceName', async (req, res) => {
     for (let i = 0; i < count; i++) {
       promises.push(service.simulateRequest());
     }
-    
+
     await Promise.all(promises);
-    res.json({ 
+    res.json({
       success: true,
       message: `Simulated ${count} requests on ${serviceName}`,
       timestamp: Date.now()
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       error: 'Failed to simulate traffic',
-      message: error.message 
+      message: error.message
     });
   }
 });
@@ -339,7 +339,7 @@ app.post('/api/stress-test', async (req, res) => {
     const startTime = Date.now();
     const endTime = startTime + (duration * 1000);
     const interval = 1000 / requestsPerSecond;
-    
+
     res.json({
       success: true,
       message: `Stress test started for ${duration} seconds`,
@@ -351,15 +351,15 @@ app.post('/api/stress-test', async (req, res) => {
     (async () => {
       while (Date.now() < endTime) {
         const service = services[Math.floor(Math.random() * services.length)];
-        service.simulateRequest().catch(() => {});
+        service.simulateRequest().catch(() => { });
         await new Promise(resolve => setTimeout(resolve, interval));
       }
     })();
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       error: 'Failed to start stress test',
-      message: error.message 
+      message: error.message
     });
   }
 });
@@ -373,7 +373,7 @@ app.get('/api/health', (req, res) => {
   try {
     const metrics = advancedMetricsCollector.getAggregatedMetrics();
     const stats = advancedMetricsCollector.getSystemStats();
-    
+
     res.json({
       success: true,
       status: 'healthy',
@@ -383,10 +383,10 @@ app.get('/api/health', (req, res) => {
       stats
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       status: 'unhealthy',
-      error: error.message 
+      error: error.message
     });
   }
 });
@@ -405,10 +405,10 @@ app.post('/api/reset', (req, res) => {
       timestamp: Date.now()
     });
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       success: false,
       error: 'Failed to reset metrics',
-      message: error.message 
+      message: error.message
     });
   }
 });

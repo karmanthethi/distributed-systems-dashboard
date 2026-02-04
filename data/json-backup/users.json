@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "id": "user_mkz066qgyfbsg00o8",
+      "email": "test@example.com",
+      "passwordHash": "$2b$10$tvp0fQUrFD8UP4WyL.WiqO7dG1X0y2r2YNmsyn61cBtgL128hOQla",
+      "createdAt": "2026-01-29T05:17:41.656Z"
+    }
+  ]
+}

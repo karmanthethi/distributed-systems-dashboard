@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "id": "6c4ee0e2-e397-4782-8349-6ff01795dbf7",
+      "email": "admin@admin.com",
+      "password": "$2b$10$271qWbn8i3vR1vIjDsFjoOWD.U.H2IeMzkCIpKNfWbRmg2THKvPrG",
+      "role": "admin",
+      "createdAt": "2026-01-31T05:15:53.163Z"
+    }
+  ],
+  "apis": [],
+  "monitoringConfigs": [],
+  "systemConfig": {
+    "globalPause": false,
+    "defaultInterval": 5000,
+    "stressDuration": 10,
+    "stressRps": 50
+  }
+}
