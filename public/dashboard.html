@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ServiceWatch | Distributed Systems Monitor</title>
+  <meta name="description"
+    content="Real-time distributed systems monitoring dashboard with enterprise-grade observability">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+
+<body>
+  <!-- Animated Background -->
+  <div class="bg-effects">
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Main App Container -->
+  <div class="app-container">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon">
+            <img src="logo.png" alt="ServiceWatch" style="width: 100%; height: 100%; object-fit: contain;">
+          </div>
+          <span class="logo-text">ServiceWatch</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-section="dashboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-section="services">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12 2v4m0 12v4M2 12h4m12 0h4" />
+            <path d="M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+          </svg>
+          <span>Services</span>
+        </a>
+        <a href="#" class="nav-item" data-section="anomalies">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <span>Anomalies</span>
+        </a>
+        <a href="#" class="nav-item" data-section="performance">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
+          </svg>
+          <span>Analytics</span>
+        </a>
+        <a href="#" class="nav-item" data-section="my-apis" id="my-apis-nav">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+            <line x1="12" y1="22.08" x2="12" y2="12" />
+          </svg>
+          <span>My APIs</span>
+        </a>
+      </nav>
+
+      <!-- User Auth Section -->
+      <div class="sidebar-user-section">
+        <!-- Logged Out State -->
+        <div class="auth-buttons" id="auth-buttons">
+          <button class="btn-auth login" id="login-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            Login
+          </button>
+          <button class="btn-auth signup" id="signup-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+              <circle cx="8.5" cy="7" r="4" />
+              <line x1="20" y1="8" x2="20" y2="14" />
+              <line x1="23" y1="11" x2="17" y2="11" />
+            </svg>
+            Sign Up
+          </button>
+        </div>
+
+        <!-- Logged In State -->
+        <div class="user-profile hidden" id="user-profile">
+          <div class="user-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </div>
+          <div class="user-info">
+            <span class="user-email" id="user-email">user@example.com</span>
+            <button class="btn-logout" id="logout-btn">Logout</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="connection-status">
+          <span class="status-dot online"></span>
+          <span>Connected</span>
+        </div>
+        <div class="version">v2.0.0</div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Top Header Bar -->
+      <header class="top-bar">
+        <div class="page-title">
+          <h1>System Overview</h1>
+          <p class="page-subtitle">Real-time monitoring of your distributed infrastructure</p>
+        </div>
+        <div class="header-actions">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+            </svg>
+            <input type="text" placeholder="Search services..." id="search-input">
+          </div>
+          <button class="btn-icon" id="refresh-btn" title="Refresh">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 4v6h-6" />
+              <path d="M1 20v-6h6" />
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+            </svg>
+          </button>
+          <div class="live-indicator">
+            <span class="pulse"></span>
+            Live
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Section -->
+      <section id="dashboard-section" class="section active">
+        <!-- Quick Stats Row -->
+        <div class="stats-grid">
+          <div class="stat-card" data-type="health">
+            <div class="stat-icon success">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                <polyline points="22 4 12 14.01 9 11.01" />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">System Health</span>
+              <span class="stat-value" id="health-score">--</span>
+              <span class="stat-trend up">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                  <polyline points="17 6 23 6 23 12" />
+                </svg>
+                +2.5%
+              </span>
+            </div>
+          </div>
+
+          <div class="stat-card" data-type="requests">
+            <div class="stat-icon info">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 20V10" />
+                <path d="M12 20V4" />
+                <path d="M6 20v-6" />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Total Requests</span>
+              <span class="stat-value" id="total-requests">--</span>
+              <span class="stat-trend up">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                  <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+                  <polyline points="17 6 23 6 23 12" />
+                </svg>
+                +15.3%
+              </span>
+            </div>
+          </div>
+
+          <div class="stat-card" data-type="errors">
+            <div class="stat-icon warning">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                <line x1="12" y1="9" x2="12" y2="13" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Error Rate</span>
+              <span class="stat-value" id="error-rate">--</span>
+              <span class="stat-trend down">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14">
+                  <polyline points="23 18 13.5 8.5 8.5 13.5 1 6" />
+                  <polyline points="17 18 23 18 23 12" />
+                </svg>
+                -1.2%
+              </span>
+            </div>
+          </div>
+
+          <div class="stat-card" data-type="anomalies">
+            <div class="stat-icon danger">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+            </div>
+            <div class="stat-info">
+              <span class="stat-label">Anomalies</span>
+              <span class="stat-value" id="anomalies-count">--</span>
+              <span class="stat-trend neutral">Active issues</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Services Section -->
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>Service Metrics</h2>
+            <p>Real-time health and performance monitoring</p>
+          </div>
+          <div class="section-actions">
+            <button class="btn-secondary" id="filter-services">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+              </svg>
+              Filter
+            </button>
+            <button class="btn-secondary" id="export-metrics">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              Export
+            </button>
+          </div>
+        </div>
+
+        <div class="services-grid" id="services-grid">
+          <!-- Services will be populated here -->
+        </div>
+
+        <!-- Action Panel -->
+        <div class="action-panel">
+          <h3>Testing & Simulation</h3>
+          <div class="action-buttons">
+            <button class="btn-primary" id="simulate-traffic-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+              Simulate Traffic
+            </button>
+            <button class="btn-accent" id="stress-test-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+              Stress Test
+            </button>
+            <button class="btn-outline" id="reset-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                <path d="M3 3v5h5" />
+              </svg>
+              Reset
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Services Detail Section -->
+      <section id="services-section" class="section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>Detailed Service Analysis</h2>
+            <p>In-depth metrics and trace information</p>
+          </div>
+        </div>
+        <div class="services-detail" id="services-detail">
+          <!-- Detailed service cards will be populated here -->
+        </div>
+      </section>
+
+      <!-- Anomalies Section -->
+      <section id="anomalies-section" class="section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>System Anomalies</h2>
+            <p>Active alerts and issues requiring attention</p>
+          </div>
+          <div class="section-actions">
+            <select id="anomaly-severity-filter" class="select-input">
+              <option value="">All Severities</option>
+              <option value="critical">Critical</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="anomalies-list" id="anomalies-list">
+          <!-- Anomalies will be populated here -->
+        </div>
+      </section>
+
+      <!-- My APIs Section -->
+      <section id="my-apis-section" class="section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>My Custom APIs</h2>
+            <p>APIs you've added for monitoring</p>
+          </div>
+          <div class="section-actions">
+            <button class="btn-primary" id="add-api-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add API
+            </button>
+          </div>
+        </div>
+
+        <!-- Not logged in state -->
+        <div class="my-apis-login-prompt" id="my-apis-login-prompt">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+            <h3>Login Required</h3>
+            <p>Please login or sign up to add and manage your custom APIs</p>
+            <button class="btn-primary" id="my-apis-login-btn">Login</button>
+          </div>
+        </div>
+
+        <!-- User APIs grid -->
+        <div class="user-apis-grid hidden" id="user-apis-grid">
+          <!-- User APIs will be populated here -->
+        </div>
+
+        <!-- Empty state when logged in but no APIs -->
+        <div class="my-apis-empty hidden" id="my-apis-empty">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="64" height="64">
+              <path
+                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+              <line x1="12" y1="22.08" x2="12" y2="12" />
+            </svg>
+            <h3>No APIs Added Yet</h3>
+            <p>Add your first API to start monitoring</p>
+            <button class="btn-primary" id="add-first-api-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
+              </svg>
+              Add Your First API
+            </button>
+          </div>
+        </div>
+
+        <!-- Suggested APIs Section -->
+        <div class="suggested-apis-section hidden" id="suggested-apis-section">
+          <div class="header-divider">
+            <span>Suggested Free APIs</span>
+          </div>
+          <div class="suggested-apis-grid" id="suggested-apis-grid">
+            <!-- Suggested APIs populated here -->
+          </div>
+        </div>
+      </section>
+
+      <!-- Performance Section -->
+      <section id="performance-section" class="section">
+        <div class="section-header">
+          <div class="section-title-group">
+            <h2>Performance Analytics</h2>
+            <p>Historical trends and detailed metrics</p>
+          </div>
+        </div>
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Latency Trends</h3>
+              <span class="chart-badge">Last 24h</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="latency-chart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Error Rate Trends</h3>
+              <span class="chart-badge">Last 24h</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="error-chart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Resource Usage</h3>
+              <span class="chart-badge">CPU & Memory</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="resource-chart"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3>Status Code Distribution</h3>
+              <span class="chart-badge">All Services</span>
+            </div>
+            <div class="chart-body">
+              <canvas id="status-chart"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="main-footer">
+        <div class="footer-left">
+          <span>Last updated: <strong id="last-update">--:--:--</strong></span>
+        </div>
+        <div class="footer-right">
+          <span>Services: <strong id="footer-services">0</strong></span>
+          <span class="divider">|</span>
+          <span>Uptime: <strong id="footer-uptime">0h</strong></span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-spinner">
+    <div class="loader">
+      <div class="loader-ring"></div>
+      <div class="loader-ring"></div>
+      <div class="loader-ring"></div>
+      <span class="loader-text">Loading...</span>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Auth Modal -->
+  <div class="modal-overlay hidden" id="auth-modal">
+    <div class="modal auth-modal">
+      <button class="modal-close" id="auth-modal-close">&times;</button>
+
+      <!-- Login Form -->
+      <div class="auth-form" id="login-form">
+        <h2>Welcome Back</h2>
+        <p class="form-subtitle">Login to access your custom APIs</p>
+        <form id="login-form-element">
+          <div class="form-group">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input type="password" id="login-password" placeholder="••••••••" required>
+          </div>
+          <div class="form-error hidden" id="login-error"></div>
+          <button type="submit" class="btn-primary full-width">Login</button>
+        </form>
+        <p class="form-switch">Don't have an account? <a href="#" id="switch-to-signup">Sign up</a></p>
+      </div>
+
+      <!-- Signup Form -->
+      <div class="auth-form hidden" id="signup-form">
+        <h2>Create Account</h2>
+        <p class="form-subtitle">Start monitoring your APIs today</p>
+        <form id="signup-form-element">
+          <div class="form-group">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" placeholder="Min 6 characters" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label for="signup-confirm">Confirm Password</label>
+            <input type="password" id="signup-confirm" placeholder="••••••••" required>
+          </div>
+          <div class="form-error hidden" id="signup-error"></div>
+          <button type="submit" class="btn-primary full-width">Create Account</button>
+        </form>
+        <p class="form-switch">Already have an account? <a href="#" id="switch-to-login">Login</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add API Modal -->
+  <div class="modal-overlay hidden" id="add-api-modal">
+    <div class="modal add-api-modal">
+      <button class="modal-close" id="add-api-modal-close">&times;</button>
+      <h2>Add Custom API</h2>
+      <p class="form-subtitle">Monitor any API endpoint</p>
+      <form id="add-api-form">
+        <div class="form-group">
+          <label for="api-name">API Name</label>
+          <input type="text" id="api-name" placeholder="My Custom API" required minlength="2">
+        </div>
+        <div class="form-group">
+          <label for="api-url">URL</label>
+          <input type="url" id="api-url" placeholder="https://api.example.com/endpoint" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="api-method">Method</label>
+            <select id="api-method">
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+              <option value="PUT">PUT</option>
+              <option value="DELETE">DELETE</option>
+              <option value="PATCH">PATCH</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="api-region">Region (Optional)</label>
+            <input type="text" id="api-region" placeholder="US-East">
+          </div>
+        </div>
+        <div class="form-error hidden" id="add-api-error"></div>
+        <button type="submit" class="btn-primary full-width">Add API</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+
+</html>

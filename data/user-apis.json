@@ -1,0 +1,126 @@
+{
+  "userApis": {
+    "user_mkz066qgyfbsg00o8": [
+      {
+        "id": "api_3zl2y0ab7",
+        "name": "Open-Meteo Weather (NYC)",
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=40.71&longitude=-74.01&current_weather=true",
+        "method": "GET",
+        "region": "EU-West",
+        "headers": {},
+        "description": "Real-time weather data for New York City",
+        "createdAt": "2026-01-29T07:05:08.486Z",
+        "isActive": true,
+        "isDemo": true
+      },
+      {
+        "id": "api_k2eeid7mq",
+        "name": "CoinGecko Bitcoin Price",
+        "url": "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd,eur",
+        "method": "GET",
+        "region": "US-East",
+        "headers": {},
+        "description": "Live Bitcoin & Ethereum prices in USD/EUR",
+        "createdAt": "2026-01-29T07:05:08.487Z",
+        "isActive": true,
+        "isDemo": true
+      },
+      {
+        "id": "api_4guqu2ezq",
+        "name": "NASA Astronomy Picture",
+        "url": "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY",
+        "method": "GET",
+        "region": "US-East",
+        "headers": {},
+        "description": "NASA Astronomy Picture of the Day",
+        "createdAt": "2026-01-29T07:05:08.487Z",
+        "isActive": true,
+        "isDemo": true
+      },
+      {
+        "id": "api_1tqht7bas",
+        "name": "USGS Earthquakes (Last Hour)",
+        "url": "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.geojson",
+        "method": "GET",
+        "region": "US-West",
+        "headers": {},
+        "description": "Real earthquake data from the last hour",
+        "createdAt": "2026-01-29T07:05:08.487Z",
+        "isActive": true,
+        "isDemo": true
+      },
+      {
+        "id": "api_2ynp3yv11",
+        "name": "SpaceX Latest Launch",
+        "url": "https://api.spacexdata.com/v4/launches/latest",
+        "method": "GET",
+        "region": "US-Central",
+        "headers": {},
+        "description": "Latest SpaceX rocket launch data",
+        "createdAt": "2026-01-29T07:05:08.487Z",
+        "isActive": true,
+        "isDemo": true
+      },
+      {
+        "id": "api_xsz5o6jm7",
+        "name": "Exchange Rates (EUR base)",
+        "url": "https://api.frankfurter.app/latest",
+        "method": "GET",
+        "region": "EU-Central",
+        "headers": {},
+        "description": "Real currency exchange rates",
+        "createdAt": "2026-01-29T07:05:08.487Z",
+        "isActive": true,
+        "isDemo": true
+      },
+      {
+        "id": "api_vvg1uz06m",
+        "name": "IP Geolocation",
+        "url": "https://ipapi.co/json/",
+        "method": "GET",
+        "region": "US-West",
+        "headers": {},
+        "description": "Your current IP location data",
+        "createdAt": "2026-01-29T07:05:08.487Z",
+        "isActive": true,
+        "isDemo": true
+      },
+      {
+        "id": "api_tmrh2glvq",
+        "name": "World Population Clock",
+        "url": "https://countrymeters.info/en/World",
+        "method": "GET",
+        "region": "EU-West",
+        "headers": {},
+        "description": "World population statistics",
+        "createdAt": "2026-01-29T07:05:08.487Z",
+        "isActive": true,
+        "isDemo": true
+      },
+      {
+        "id": "api_55nwemocz",
+        "name": "GitHub API Status",
+        "url": "https://www.githubstatus.com/api/v2/status.json",
+        "method": "GET",
+        "region": "US-East",
+        "headers": {},
+        "description": "GitHub service status check",
+        "createdAt": "2026-01-29T07:05:08.487Z",
+        "isActive": true,
+        "isDemo": true
+      },
+      {
+        "id": "api_ephrhzazj",
+        "name": "International Space Station",
+        "url": "http://api.open-notify.org/iss-now.json",
+        "method": "GET",
+        "region": "US-Central",
+        "headers": {},
+        "description": "Current ISS location in real-time",
+        "createdAt": "2026-01-29T07:05:08.487Z",
+        "isActive": true,
+        "isDemo": true
+      }
+    ]
+  }
+}
